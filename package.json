@@ -4,7 +4,7 @@
   "description": "",
   "license": "ISC",
   "author": "Keroz",
-  "type": "commonjs",
+  "type": "module",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -13,7 +13,9 @@
   },
   "dependencies": {
     "express": "^5.1.0",
-    "twig": "^1.17.1"
+    "node-fetch": "^3.3.2",
+    "twig": "^1.17.1",
+    "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

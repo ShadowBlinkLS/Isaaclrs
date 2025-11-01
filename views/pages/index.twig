@@ -1,5 +1,21 @@
-{% block main %}
+<section class="videos">
+  <h2>Dernières vidéos YouTube</h2>
 
-<h1>Ceci est la page index</h1>
-
-{% endblock %}
+  <div class="videos-grid">
+    {% for video in videos %}
+      <div class="video-card">
+        <iframe
+          width="25%"
+          height="315"
+          src="https://www.youtube.com/embed/{{ video.id }}"
+          title="{{ video.title }}"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
+        <h3>{{ video.title }}</h3>
+        <p>Publié le {{ video.publishedAt | date("d/m/Y") }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
