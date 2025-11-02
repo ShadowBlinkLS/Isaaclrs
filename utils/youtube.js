@@ -97,7 +97,7 @@ export async function getLatestVideosRSS(channelId, maxResults = 25) {
 /**
  * 🔹 Fonction principale — essaie d’abord l’API, sinon fallback RSS
  */
-export async function getLatestVideos(channelId, maxResults = 10) {
+export async function getLatestVideos(channelId, maxResults = 25) {
   const apiVideos = await getLatestVideosAPI(channelId, maxResults);
   if (apiVideos && apiVideos.length > 0) return apiVideos;
   return await getLatestVideosRSS(channelId, maxResults);

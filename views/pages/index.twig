@@ -1,187 +1,257 @@
 {% extends "../layouts/base.twig" %}
 
 {% block main %}
-<div class="min-h-screen bg-black text-white pt-20">
-  <!-- Hero Section - Embed Twitch -->
-  <section class="relative h-[85vh] flex items-center justify-center mb-8 px-4">
-    <div class="w-full max-w-7xl mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <!-- Player Twitch -->
-        <div class="lg:col-span-2 relative w-full" style="padding-bottom: 56.25%; height: 0;">
-          <iframe
-            src="https://player.twitch.tv/?channel=isaaclrs&parent=localhost&muted=false"
-            allowfullscreen
-            class="absolute top-0 left-0 w-full h-full rounded-lg"
-            style="border: none;"
-          ></iframe>
-        </div>
-        
-        <!-- Chat Twitch -->
-        <div class="lg:col-span-1 hidden lg:block relative w-full" style="height: 450px;">
-          <iframe
-            src="https://www.twitch.tv/embed/isaaclrs/chat?parent=localhost&darkpopout"
-            class="absolute top-0 left-0 w-full h-full rounded-lg"
-            style="border: none;"
-          ></iframe>
-        </div>
-      </div>
-    </div>
-  </section>
+	<div
+		class="min-h-screen bg-black text-white pt-20">
+		<!-- Hero Section - Embed Twitch -->
+		<section class="relative h-[85vh] flex items-center justify-center mb-8 px-4">
+			<div class="w-full max-w-7xl mx-auto">
+				<div
+					class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+					<!-- Player Twitch -->
+					<div class="lg:col-span-2 relative w-full" style="padding-bottom: 56.25%; height: 0;">
+						<iframe src="https://player.twitch.tv/?channel=isaaclrs&parent=localhost&muted=false" allowfullscreen class="absolute top-0 left-0 w-full h-full rounded-lg" style="border: none;"></iframe>
+					</div>
 
-  <!-- Section des vidéos avec défilement horizontal -->
-  <section class="mb-12 px-4">
-    <h2 class="text-2xl font-bold mb-6">Dernières vidéos YouTube</h2>
-    
-    <div class="relative group">
-      <!-- Bouton gauche -->
-      <button id="scrollLeft" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-black text-white p-2 rounded-r opacity-0 group-hover:opacity-100 transition">
-        ←
-      </button>
-      
-      <!-- Container scrollable -->
-      <div id="videoContainer" class="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth pb-4" style="scrollbar-width: none; -ms-overflow-style: none;">
-        {% for video in videos %}
-        <div class="flex-shrink-0 w-80 group cursor-pointer">
-          <div class="relative overflow-hidden rounded-lg transition-transform hover:scale-105 duration-300">
-            <!-- Thumbnail vidéo -->
-            <img 
-              src="https://img.youtube.com/vi/{{ video.id }}/maxresdefault.jpg" 
-              alt="{{ video.title }}"
-              class="w-full h-48 object-cover"
-              onerror="this.src='https://img.youtube.com/vi/{{ video.id }}/hqdefault.jpg'"
-            >
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition">
-              <div class="absolute bottom-0 left-0 right-0 p-4">
-                <h3 class="text-white font-bold text-sm mb-1 line-clamp-2">{{ video.title }}</h3>
-                <p class="text-gray-300 text-xs">Publié le {{ video.publishedAt | date("d/m/Y") }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-      
-      <!-- Bouton droit -->
-      <button id="scrollRight" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-black text-white p-2 rounded-l opacity-0 group-hover:opacity-100 transition">
-        →
-      </button>
-    </div>
-  </section>
+					<!-- Chat Twitch -->
+					<div class="lg:col-span-1 hidden lg:block relative w-full" style="height: 450px;">
+						<iframe src="https://www.twitch.tv/embed/isaaclrs/chat?parent=localhost&darkpopout" class="absolute top-0 left-0 w-full h-full rounded-lg" style="border: none;"></iframe>
+					</div>
+				</div>
+			</div>
+		</section>
 
-  <!-- Section avec images de placeholder pour d'autres catégories -->
-  <section class="mb-12 px-4">
-    <h2 class="text-2xl font-bold mb-6">Tendances</h2>
-    
-    <div class="relative group">
-      <button id="scrollLeft2" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-black text-white p-2 rounded-r opacity-0 group-hover:opacity-100 transition">
-        ←
-      </button>
-      
-      <div id="trendingContainer" class="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth pb-4" style="scrollbar-width: none; -ms-overflow-style: none;">
-        {% for video in videos|slice(0, 5) %}
-        <div class="flex-shrink-0 w-64 group cursor-pointer">
-          <div class="relative overflow-hidden rounded-lg transition-transform hover:scale-105 duration-300">
-            <img 
-              src="https://img.youtube.com/vi/{{ video.id }}/maxresdefault.jpg" 
-              alt="{{ video.title }}"
-              class="w-full h-36 object-cover"
-              onerror="this.src='https://img.youtube.com/vi/{{ video.id }}/hqdefault.jpg'"
-            >
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-      
-      <button id="scrollRight2" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-black text-white p-2 rounded-l opacity-0 group-hover:opacity-100 transition">
-        →
-      </button>
-    </div>
-  </section>
-</div>
+		<!-- Section des vidéos YouTube -->
+		<section class="mb-12 px-4">
+			<h2 class="text-2xl font-bold mb-6">Dernières vidéos YouTube</h2>
+
+			{% if videos and videos.length > 0 %}
+				<div
+					class="relative group">
+					<!-- Bouton gauche -->
+					<button id="scrollLeft" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-black text-white p-2 rounded-r opacity-0 group-hover:opacity-100 transition">
+						←
+					</button>
+
+					<!-- Container scrollable -->
+					<div id="videoContainer" class="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth pb-4" style="scrollbar-width: none; -ms-overflow-style: none;">
+						{% for video in videos %}
+							<div class="flex-shrink-0 w-[420px] group cursor-pointer">
+								<div
+									class="relative overflow-hidden rounded-lg transition-transform hover:scale-105 duration-300 bg-zinc-900">
+									<!-- Embed YouTube -->
+									<div class="relative w-full" style="padding-bottom: 56.25%; height: 0;">
+										<iframe loading="lazy" src="https://www.youtube.com/embed/{{ video.id }}?autoplay=0" title="{{ video.title }}" class="absolute top-0 left-0 w-full h-full rounded-lg" frameborder="0" allowfullscreen></iframe>
+									</div>
+
+									<!-- Infos vidéo -->
+									<div class="p-3">
+										<h3 class="text-sm font-bold text-white mb-1 truncate">{{ video.title }}</h3>
+										<p class="text-xs text-gray-400">Publié le
+											{{ video.publishedAt | date("d/m/Y") }}</p>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+
+					<!-- Bouton droit -->
+					<button id="scrollRight" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-black text-white p-2 rounded-l opacity-0 group-hover:opacity-100 transition">
+						→
+					</button>
+				</div>
+			{% else %}
+				<p class="text-gray-400">Aucune vidéo trouvée 😢</p>
+			{% endif %}
+		</section>
+
+
+		<!-- Section des rediffusions Twitch -->
+		<section id="twitch" class="mb-12 px-4">
+			<h2 class="text-2xl font-bold mb-6">Dernières rediffusions Twitch</h2>
+
+			{% if twitchVods and twitchVods.length > 0 %}
+				<div
+					class="relative group">
+					<!-- Bouton gauche -->
+					<button id="scrollLeftTwitch" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-black text-white p-2 rounded-r opacity-0 group-hover:opacity-100 transition">
+						←
+					</button>
+
+					<!-- Container scrollable -->
+					<div id="twitchContainer" class="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth pb-4" style="scrollbar-width: none; -ms-overflow-style: none;">
+						{% for vod in twitchVods %}
+							<div class="flex-shrink-0 w-[420px] group cursor-pointer">
+								<div
+									class="relative overflow-hidden rounded-lg transition-transform hover:scale-105 duration-300 bg-zinc-900">
+									<!-- Player Twitch Embed -->
+									<div class="relative w-full" style="padding-bottom: 56.25%; height: 0;">
+										<iframe loading="lazy" src="https://player.twitch.tv/?video={{ vod.id }}&parent=localhost&autoplay=false" class="absolute top-0 left-0 w-full h-full rounded-lg" frameborder="0" allowfullscreen></iframe>
+									</div>
+
+									<!-- Infos overlay -->
+									<div class="p-3">
+										<h3 class="text-sm font-bold text-white mb-1 truncate">{{ vod.title }}</h3>
+										<p class="text-xs text-gray-400">Durée :
+											{{ vod.duration }}</p>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+
+					<!-- Bouton droit -->
+					<button id="scrollRightTwitch" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-black text-white p-2 rounded-l opacity-0 group-hover:opacity-100 transition">
+						→
+					</button>
+				</div>
+			{% else %}
+				<p class="text-gray-400">Aucune rediffusion trouvée 😢</p>
+			{% endif %}
+		</section>
+
+	</div>
 {% endblock %}
 
 {% block script %}
-<style>
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-</style>
+	<style>
+		.scrollbar-hide::-webkit-scrollbar {
+			display: none;
+		}
+		.scrollbar-hide {
+			-ms-overflow-style: none;
+			scrollbar-width: none;
+		}
+		.line-clamp-2 {
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+		}
+	</style>
 
-<script>
-  // Script pour le défilement horizontal
-  const scrollContainer1 = document.getElementById('videoContainer');
-  const scrollLeft1 = document.getElementById('scrollLeft');
-  const scrollRight1 = document.getElementById('scrollRight');
-  const scrollContainer2 = document.getElementById('trendingContainer');
-  const scrollLeft2 = document.getElementById('scrollLeft2');
-  const scrollRight2 = document.getElementById('scrollRight2');
+	<script>
+		// Script pour le défilement horizontal
+const scrollContainer1 = document.getElementById('videoContainer');
+const scrollLeft1 = document.getElementById('scrollLeft');
+const scrollRight1 = document.getElementById('scrollRight');
+const scrollContainer2 = document.getElementById('trendingContainer');
+const scrollLeft2 = document.getElementById('scrollLeft2');
+const scrollRight2 = document.getElementById('scrollRight2');
 
-  // Première section
-  if (scrollRight1) {
-    scrollRight1.addEventListener('click', () => {
-      scrollContainer1.scrollBy({ left: 500, behavior: 'smooth' });
-    });
-  }
-  
-  if (scrollLeft1) {
-    scrollLeft1.addEventListener('click', () => {
-      scrollContainer1.scrollBy({ left: -500, behavior: 'smooth' });
-    });
-  }
+// Première section
+if (scrollRight1) {
+scrollRight1.addEventListener('click', () => {
+scrollContainer1.scrollBy({left: 500, behavior: 'smooth'});
+});
+}
 
-  // Deuxième section
-  if (scrollRight2) {
-    scrollRight2.addEventListener('click', () => {
-      scrollContainer2.scrollBy({ left: 500, behavior: 'smooth' });
-    });
-  }
-  
-  if (scrollLeft2) {
-    scrollLeft2.addEventListener('click', () => {
-      scrollContainer2.scrollBy({ left: -500, behavior: 'smooth' });
-    });
-  }
+if (scrollLeft1) {
+scrollLeft1.addEventListener('click', () => {
+scrollContainer1.scrollBy({left: -500, behavior: 'smooth'});
+});
+}
 
-  // Défilement à la souris pour l'expérience mobile
-  let isDown = false;
-  let startX;
-  let scrollLeft;
+// Deuxième section
+if (scrollRight2) {
+scrollRight2.addEventListener('click', () => {
+scrollContainer2.scrollBy({left: 500, behavior: 'smooth'});
+});
+}
 
-  [scrollContainer1, scrollContainer2].forEach(container => {
-    container.addEventListener('mousedown', (e) => {
-      isDown = true;
-      container.style.cursor = 'grabbing';
-      startX = e.pageX - container.offsetLeft;
-      scrollLeft = container.scrollLeft;
-    });
+if (scrollLeft2) {
+scrollLeft2.addEventListener('click', () => {
+scrollContainer2.scrollBy({left: -500, behavior: 'smooth'});
+});
+}
 
-    container.addEventListener('mouseleave', () => {
-      isDown = false;
-      container.style.cursor = 'grab';
-    });
+// Défilement à la souris pour l'expérience mobile
+let isDown = false;
+let startX;
+let scrollLeft;
 
-    container.addEventListener('mouseup', () => {
-      isDown = false;
-      container.style.cursor = 'grab';
-    });
+[scrollContainer1, scrollContainer2].forEach(container => {
+container.addEventListener('mousedown', (e) => {
+isDown = true;
+container.style.cursor = 'grabbing';
+startX = e.pageX - container.offsetLeft;
+scrollLeft = container.scrollLeft;
+});
 
-    container.addEventListener('mousemove', (e) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - container.offsetLeft;
-      const walk = (x - startX) * 2;
-      container.scrollLeft = scrollLeft - walk;
-    });
-  });
-</script>
+container.addEventListener('mouseleave', () => {
+isDown = false;
+container.style.cursor = 'grab';
+});
+
+container.addEventListener('mouseup', () => {
+isDown = false;
+container.style.cursor = 'grab';
+});
+
+container.addEventListener('mousemove', (e) => {
+if (! isDown) 
+return;
+
+
+
+// Section Twitch scroll horizontal
+const scrollContainerTwitch = document.getElementById('twitchContainer');
+const scrollLeftTwitch = document.getElementById('scrollLeftTwitch');
+const scrollRightTwitch = document.getElementById('scrollRightTwitch');
+
+if (scrollRightTwitch) {
+scrollRightTwitch.addEventListener('click', () => {
+scrollContainerTwitch.scrollBy({left: 500, behavior: 'smooth'});
+});
+}
+
+if (scrollLeftTwitch) {
+scrollLeftTwitch.addEventListener('click', () => {
+scrollContainerTwitch.scrollBy({left: -500, behavior: 'smooth'});
+});
+}
+
+// Drag-scroll pour Twitch aussi
+if (scrollContainerTwitch) {
+let isDown = false;
+let startX;
+let scrollLeft;
+
+scrollContainerTwitch.addEventListener('mousedown', (e) => {
+isDown = true;
+scrollContainerTwitch.style.cursor = 'grabbing';
+startX = e.pageX - scrollContainerTwitch.offsetLeft;
+scrollLeft = scrollContainerTwitch.scrollLeft;
+});
+
+scrollContainerTwitch.addEventListener('mouseleave', () => {
+isDown = false;
+scrollContainerTwitch.style.cursor = 'grab';
+});
+
+scrollContainerTwitch.addEventListener('mouseup', () => {
+isDown = false;
+scrollContainerTwitch.style.cursor = 'grab';
+});
+
+scrollContainerTwitch.addEventListener('mousemove', (e) => {
+if (! isDown) 
+return;
+
+
+e.preventDefault();
+const x = e.pageX - scrollContainerTwitch.offsetLeft;
+const walk = (x - startX) * 2;
+scrollContainerTwitch.scrollLeft = scrollLeft - walk;
+});
+}
+
+
+e.preventDefault();
+const x = e.pageX - container.offsetLeft;
+const walk = (x - startX) * 2;
+container.scrollLeft = scrollLeft - walk;
+});
+});
+	</script>
 {% endblock %}

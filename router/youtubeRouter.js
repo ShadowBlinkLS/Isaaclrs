@@ -1,19 +1,20 @@
 import express from "express";
 import { getLatestVideos } from "../utils/youtube.js";
 import { getTwitchFollowers, getInstagramFollowers, getTikTokFollowers } from "../utils/socialMedia.js";
+import { getLatestTwitchVideos } from "../utils/twitch.js";
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const videos = await getLatestVideos("UC07hFy4lz8MFezbicHq7LrA", 25);
-        // Récupération des stats avec les bons usernames
-    const [twitch, instagram, tiktok] = await Promise.allSettled([
+    const [videos, twitchVods, twitch, instagram, tiktok] = await Promise.allSettled([
+      getLatestVideos("UC07hFy4lz8MFezbicHq7LrA", 25),
+      getLatestTwitchVideos("isaaclrs", 6),
       getTwitchFollowers("isaaclrs"),
       getInstagramFollowers("isaaclrs"),
-      getTikTokFollowers("isaaclrss") // TikTok avec le bon username
-    ]);    
-    // Fonction de formatage
+      getTikTokFollowers("isaaclrss")
+    ]);
+
     const formatFollowers = (count) => {
       if (count >= 1000000) {
         return (count / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
@@ -22,7 +23,7 @@ router.get("/", async (req, res) => {
       }
       return count.toString();
     };
-    
+
     const socialStats = {
       twitch: twitch.status === 'fulfilled' ? { 
         ...twitch.value, 
@@ -37,10 +38,16 @@ router.get("/", async (req, res) => {
         formatted: formatFollowers(tiktok.value.followers || 0) 
       } : { followers: 0, success: false, formatted: '0' }
     };
-    
-    res.render("pages/index.twig", { videos, socialStats });
+
+    res.render("pages/index.twig", { 
+      videos: videos.status === 'fulfilled' ? videos.value : [],
+      twitchVods: twitchVods.status === 'fulfilled' ? twitchVods.value : [],
+      socialStats
+    });
+
   } catch (error) {
-    res.status(500).send("Erreur lors du chargement des vidéos YouTube.");
+    console.error("❌ Erreur route principale:", error.message);
+    res.status(500).send("Erreur lors du chargement de la page principale.");
   }
 });
 
