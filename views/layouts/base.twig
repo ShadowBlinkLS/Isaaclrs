@@ -4,11 +4,16 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>{% block title %}ISAACLRS{% endblock %}</title>
+		<script src="https://cdn.tailwindcss.com"></script>
 		{% block style %}{% endblock %}
-		{% block title %}{% endblock %}
 	</head>
-	<body>
-		{% include "../partials/header.twig" %}
+	<body class="bg-black">
+		{% if socialStats is defined %}
+			{% include "../partials/header.twig" with { 'socialStats': socialStats } %}
+		{% else %}
+			{% include "../partials/header.twig" %}
+		{% endif %}
 		{% block main %}{% endblock %}
 		{% include "../partials/footer.twig" %}
 		{% block script %}{% endblock %}

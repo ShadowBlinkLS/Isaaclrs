@@ -1,1 +1,59 @@
-<h1>HEADER</h1>
+<header class="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black via-black/80 to-transparent">
+  <nav class="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-4">
+    <!-- Logo Netflix -->
+    <div class="flex items-center">
+      <span class="text-red-600 text-2xl md:text-4xl font-bold">ISAACLRS</span>
+    </div>
+    
+    <!-- Compteurs sociaux et boutons droite -->
+    <div class="flex items-center space-x-4">
+      <!-- Compteurs de followers -->
+      <div class="hidden lg:flex items-center space-x-3">
+        <!-- Twitch -->
+        <a href="https://www.twitch.tv/isaaclrs" target="_blank" class="flex items-center space-x-1 text-white hover:text-purple-400 transition">
+          <span>🎮</span>
+          <span class="text-sm font-semibold">
+            {% if socialStats and socialStats.twitch and socialStats.twitch.formatted %}
+              {{ socialStats.twitch.formatted }}
+            {% elseif socialStats and socialStats.twitch %}
+              {{ socialStats.twitch.followers }}
+            {% else %}
+              0
+            {% endif %}
+          </span>
+        </a>
+        
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/isaaclrs" target="_blank" class="flex items-center space-x-1 text-white hover:text-pink-400 transition">
+          <span>📷</span>
+          <span class="text-sm font-semibold">
+            {% if socialStats and socialStats.instagram and socialStats.instagram.formatted %}
+              {{ socialStats.instagram.formatted }}
+            {% elseif socialStats and socialStats.instagram %}
+              {{ socialStats.instagram.followers }}
+            {% else %}
+              0
+            {% endif %}
+          </span>
+        </a>
+        
+        <!-- TikTok -->
+        <a href="https://www.tiktok.com/@isaaclrss" target="_blank" class="flex items-center space-x-1 text-white hover:text-cyan-400 transition">
+          <span>🎵</span>
+          <span class="text-sm font-semibold">
+            {% if socialStats and socialStats.tiktok and socialStats.tiktok.formatted %}
+              {{ socialStats.tiktok.formatted }}
+            {% elseif socialStats and socialStats.tiktok %}
+              {{ socialStats.tiktok.followers }}
+            {% else %}
+              0
+            {% endif %}
+          </span>
+        </a>
+      </div>
+      
+      <button class="text-white hover:text-gray-300 transition">🔍</button>
+      <button class="text-white hover:text-gray-300 transition">👤</button>
+    </div>
+  </nav>
+</header>
